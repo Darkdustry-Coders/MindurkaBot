@@ -1,0 +1,12 @@
+define function overwrite fn::fetch_profiles($type: "mindustry" | "discord" | "telegram", $value: string, $needed_profiles: {mindustry: option<bool>, discord: option<bool>, telegram: option<bool>}) -> {mindustry: option<object>, discord: option<object>, telegram: option<object>, dbg: any} {
+    let $user_id = if $type = "mindustry" {
+        select value user from only mindustry_profile where string::ends_with(type::string(record::id(id)), $value);
+    };
+
+    let $result = {};
+    let $result = $result.extend(if $needed_profiles.mindustry {{mindustry: select * from only mindustry_profile where user = $user_id}} else {{}});
+    // TODO: Add anonther profiles
+    return $result;
+};
+
+
